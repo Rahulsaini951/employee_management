@@ -184,6 +184,7 @@ class AppTheme {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: 4,
+        iconSize: 28
       ),
 
       // Button theme
@@ -261,7 +262,6 @@ class AppTheme {
 
 
 class AppTextStyles {
-  // This method allows us to get the text styles from the current theme
   static TextTheme _getTextTheme(BuildContext context) {
     return Theme.of(context).textTheme;
   }
@@ -285,7 +285,7 @@ class AppTextStyles {
     );
   }
 
-  // Button text styles
+
   static TextStyle negativeButtonText(BuildContext context) {
     return _getTextTheme(context).labelLarge!.copyWith(
       fontWeight: FontWeight.w500,
@@ -304,7 +304,6 @@ class AppTextStyles {
     );
   }
 
-  // Bottom sheet text style
   static TextStyle bottomSheetText(BuildContext context) {
     return _getTextTheme(context).bodyLarge!.copyWith(
       fontSize: 16,
@@ -313,7 +312,6 @@ class AppTextStyles {
     );
   }
 
-  // App bar title text style
   static TextStyle appBarTitle(BuildContext context) {
     return _getTextTheme(context).titleMedium!.copyWith(
       fontWeight: FontWeight.w500,
@@ -324,7 +322,6 @@ class AppTextStyles {
     );
   }
 
-  // Divider title heading
   static TextStyle dividerTitle(BuildContext context) {
     return _getTextTheme(context).titleSmall!.copyWith(
       fontWeight: FontWeight.w500,
@@ -334,7 +331,6 @@ class AppTextStyles {
     );
   }
 
-  // Card text styles
   static TextStyle cardEmployeeName(BuildContext context) {
     return _getTextTheme(context).titleSmall!.copyWith(
       fontWeight: FontWeight.w500,
@@ -363,7 +359,6 @@ class AppTextStyles {
     );
   }
 
-  // Swipe delete message
   static TextStyle swipeDeleteMessage(BuildContext context) {
     return _getTextTheme(context).bodyMedium!.copyWith(
       fontSize: 15,

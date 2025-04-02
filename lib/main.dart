@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talent_track/ui/common/app_theme.dart';
-import 'blocs/employee_bloc.dart';
+import 'blocs/employee/employee_bloc.dart';
 import 'data/repositories/employee_repository.dart';
 import 'ui/screens/employee_list_screen.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../data/repositories/employee_repository.dart';
+import '../../data/repositories/employee_repository.dart';
 import 'employee_event.dart';
 import 'employee_state.dart';
 
