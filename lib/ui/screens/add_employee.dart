@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:talent_track/ui/common/app_assets.dart';
 import 'package:talent_track/ui/common/app_theme.dart';
 import 'package:talent_track/ui/widgets/costom_date_picker.dart';
 import 'package:talent_track/ui/widgets/custom_app_button.dart';
@@ -9,6 +10,7 @@ import '../../blocs/employee/employee_bloc.dart';
 import '../../blocs/employee/employee_event.dart';
 import '../../data/models/employee.dart';
 import '../common/app_colors.dart';
+import '../../utils/string_util.dart';
 
 class AddEmployeeScreen extends StatefulWidget {
   final Employee? employee;
@@ -26,10 +28,10 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
   DateTime? _fromDate;
   DateTime? _toDate;
   final List<String> _roles = [
-    'Product Designer',
-    'Flutter Developer',
-    'QA Tester',
-    'Product Owner'
+    StringUtil.productDesigner,
+    StringUtil.flutterDeveloper,
+    StringUtil.qaTester,
+    StringUtil.productOwner
   ];
 
   final FocusNode _nameFocusNode = FocusNode();
@@ -68,32 +70,32 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
         backgroundColor: AppColors.secondaryBackground,
         appBar: AppBar(
           title: Text(
-            widget.employee == null ? 'Add Employee Details' : 'Edit Employee Details',
+            widget.employee == null ? StringUtil.addEmployeeDetails : StringUtil.editEmployeeDetails,
             style: AppTextStyles.appBarTitle(context),
           ),
           actions: [
             if(widget.employee?.id != null)
-            IconButton(
-              onPressed: () {
-                context.read<EmployeeBloc>().add(DeleteEmployee(widget.employee!.id!));
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Employee data has been deleted',
-                      style: AppTextStyles.input(context).copyWith(
-                        color: Colors.white,
+              IconButton(
+                onPressed: () {
+                  context.read<EmployeeBloc>().add(DeleteEmployee(widget.employee!.id!));
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        StringUtil.employeeDataDeleted,
+                        style: AppTextStyles.input(context).copyWith(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-              icon: SvgPicture.asset(
-                'assets/images/delete_icon.svg',
-                width: 24,
-                height: 24,
+                  );
+                },
+                icon: SvgPicture.asset(
+                  AppAssets.deleteIcon,
+                  width: 24,
+                  height: 24,
+                ),
               ),
-            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -110,7 +112,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                     focusNode: _nameFocusNode,
                     style: AppTextStyles.input(context),
                     decoration: InputDecoration(
-                      labelText: 'Employee name *',
+                      labelText: StringUtil.employeeName,
                       labelStyle: AppTextStyles.inputHint(context),
                       border: OutlineInputBorder(),
                       prefixIcon: SizedBox(
@@ -119,7 +121,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                         child: Align(
                           alignment: Alignment.center,
                           child: SvgPicture.asset(
-                            'assets/images/name_icon.svg',
+                            AppAssets.nameIcon,
                             height: 24,
                             width: 24,
                           ),
@@ -128,7 +130,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter employee name';
+                        return StringUtil.enterEmployeeName;
                       }
                       return null;
                     },
@@ -152,14 +154,14 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                           Align(
                             alignment: Alignment.center,
                             child: SvgPicture.asset(
-                              'assets/images/role_icon.svg',
+                              AppAssets.roleIcon,
                               height: 24,
                               width: 24,
                             ),
                           ),
                           const SizedBox(width: 12),
                           Text(
-                            _selectedRole ?? 'Select role *',
+                            _selectedRole ?? StringUtil.selectRole,
                             style: _selectedRole == null
                                 ? AppTextStyles.inputHint(context)
                                 : AppTextStyles.input(context),
@@ -191,7 +193,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                                 Align(
                                   alignment: Alignment.center,
                                   child: SvgPicture.asset(
-                                    'assets/images/calendar_icon.svg',
+                                    AppAssets.calendarIcon,
                                     height: 24,
                                     width: 24,
                                   ),
@@ -199,8 +201,8 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                                 const SizedBox(width: 8),
                                 Text(
                                   _fromDate == null
-                                      ? 'Today'
-                                      : DateFormat('d MMM, yyyy').format(_fromDate!),
+                                      ? StringUtil.today
+                                      : DateFormat(StringUtil.dateFormat).format(_fromDate!),
                                   style: AppTextStyles.input(context),
                                 ),
                               ],
@@ -228,7 +230,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                                 Align(
                                   alignment: Alignment.center,
                                   child: SvgPicture.asset(
-                                    'assets/images/calendar_icon.svg',
+                                    AppAssets.calendarIcon,
                                     height: 24,
                                     width: 24,
                                   ),
@@ -236,8 +238,8 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                                 const SizedBox(width: 8),
                                 Text(
                                   _toDate == null
-                                      ? 'No date'
-                                      : DateFormat('d MMM, yyyy').format(_toDate!),
+                                      ? StringUtil.noDate
+                                      : DateFormat(StringUtil.dateFormat).format(_toDate!),
                                   style: AppTextStyles.input(context),
                                 ),
                               ],
@@ -267,7 +269,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   CustomButton(
-                    text: 'Cancel',
+                    text: StringUtil.cancelButton,
                     onPressed: () {
                       _dismissKeyboard();
                       Navigator.pop(context);
@@ -281,7 +283,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                       _saveEmployee();
                     },
                     child: Text(
-                      'Save',
+                      StringUtil.saveButton,
                       style: AppTextStyles.positiveButtonText(context).copyWith(
                         color: Colors.white,
                       ),
@@ -383,7 +385,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Please fill all required fields',
+            StringUtil.fillRequiredFields,
             style: AppTextStyles.input(context).copyWith(
               color: Colors.white,
             ),

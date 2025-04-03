@@ -5,11 +5,12 @@ import 'package:talent_track/blocs/employee/employee_bloc.dart';
 import 'package:talent_track/blocs/employee/employee_event.dart';
 import 'package:talent_track/blocs/employee/employee_state.dart';
 import 'package:talent_track/data/models/employee.dart';
+import 'package:talent_track/ui/common/app_assets.dart';
 import 'package:talent_track/ui/common/app_colors.dart';
 import 'package:talent_track/ui/common/app_theme.dart';
 import 'package:talent_track/ui/screens/add_employee.dart';
 import 'package:talent_track/ui/widgets/employee_list_item.dart';
-
+import 'package:talent_track/utils/string_util.dart';
 
 class EmployeeListScreen extends StatelessWidget {
   const EmployeeListScreen({super.key});
@@ -20,7 +21,7 @@ class EmployeeListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Employee List',
+          StringUtil.employeeList,
           style: AppTextStyles.appBarTitle(context),
         ),
         backgroundColor: AppColors.primary,
@@ -55,8 +56,8 @@ class EmployeeListScreen extends StatelessWidget {
 
           return Center(
             child: Text(
-              'Unknown state',
-              style: textStyle.bodyLarge
+                StringUtil.unknownState,
+                style: textStyle.bodyLarge
               // AppTextStyles.bodyLarge(context),
             ),
           );
@@ -81,10 +82,10 @@ class EmployeeListScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset('assets/images/no_employee_found.svg', height: 200),
+          SvgPicture.asset(AppAssets.noEmployee, height: 200),
           const SizedBox(height: 16),
           Text(
-            'No employee records found',
+            StringUtil.noEmployeeRecordsFound,
             style: textStyle.titleMedium,
           ),
         ],
@@ -107,7 +108,7 @@ class EmployeeListScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    'Current employees',
+                    StringUtil.currentEmployees,
                     style: AppTextStyles.dividerTitle(context).copyWith(
                       color: AppColors.primary,
                     ),
@@ -121,7 +122,7 @@ class EmployeeListScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Employee data has been deleted',
+                        StringUtil.employeeDataDeleted,
                         style: AppTextStyles.input(context).copyWith(
                           color: Colors.white,
                         ),
@@ -145,7 +146,7 @@ class EmployeeListScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    'Previous employees',
+                    StringUtil.previousEmployees,
                     style: AppTextStyles.dividerTitle(context).copyWith(
                       color: AppColors.primary,
                     ),
@@ -159,7 +160,7 @@ class EmployeeListScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Employee data has been deleted',
+                        StringUtil.employeeDataDeleted,
                         style: AppTextStyles.input(context).copyWith(
                           color: Colors.white,
                         ),
@@ -188,7 +189,7 @@ class EmployeeListScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             alignment: Alignment.centerLeft,
             child: Text(
-              'Swipe left to delete',
+              StringUtil.swipeLeftToDelete,
               style: AppTextStyles.input(context).copyWith(
                 color: Colors.black54,
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:talent_track/data/models/employee.dart';
+import 'package:talent_track/ui/common/app_assets.dart';
 import 'package:talent_track/ui/common/app_colors.dart';
 import 'package:talent_track/utils/date_util.dart';
 
@@ -25,7 +26,7 @@ class EmployeeListItem extends StatelessWidget {
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 20),
           child: SvgPicture.asset(
-            'assets/images/delete_icon.svg',
+            AppAssets.deleteIcon,
             width: 24,
             height: 24,
           )
