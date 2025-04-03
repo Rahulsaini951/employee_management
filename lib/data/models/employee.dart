@@ -1,8 +1,21 @@
+import 'package:hive/hive.dart';
+part 'employee.g.dart';
+
+@HiveType(typeId: 0)
 class Employee {
+  @HiveField(0)
   final int? id;
+
+  @HiveField(1)
   final String name;
+
+  @HiveField(2)
   final String role;
+
+  @HiveField(3)
   final DateTime fromDate;
+
+  @HiveField(4)
   final DateTime? toDate;
 
   Employee({
@@ -41,11 +54,11 @@ class Employee {
 
   factory Employee.fromMap(Map<String, dynamic> map) {
     return Employee(
-      id: map['id'] as int,
-      name: map['name'] as String,
-      role: map['role'] as String,
-      fromDate: DateTime.fromMillisecondsSinceEpoch(map['fromDate'] as int),
-      toDate: map['toDate'] != null ? DateTime.fromMillisecondsSinceEpoch(map['toDate'] as int) : null,
+      id: map['id'],
+      name: map['name'],
+      role: map['role'],
+      fromDate: DateTime.fromMillisecondsSinceEpoch(map['fromDate']),
+      toDate: map['toDate'] != null ? DateTime.fromMillisecondsSinceEpoch(map['toDate']) : null,
     );
   }
 

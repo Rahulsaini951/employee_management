@@ -1,6 +1,5 @@
-import 'dart:async';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../models/employee.dart';
 
 class DatabaseHelper {
@@ -8,77 +7,54 @@ class DatabaseHelper {
   factory DatabaseHelper() => _instance;
   DatabaseHelper._internal();
 
-  static Database? _database;
+  static const String _employeeBoxName = 'employees';
+  static Box<Employee>? _employeeBox;
 
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
-  }
+  Future<void> initDatabase() async {
+    // Initialize Hive
+    await Hive.initFlutter();
 
-  Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'employee_database.db');
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _createDb,
-    );
-  }
+    // Register the Employee adapter
+    if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(EmployeeAdapter());
+    }
 
-  Future<void> _createDb(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE employees(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        role TEXT NOT NULL,
-        fromDate INTEGER NOT NULL,
-        toDate INTEGER
-      )
-    ''');
+    // Open the box
+    _employeeBox = await Hive.openBox<Employee>(_employeeBoxName);
   }
 
   Future<int> insertEmployee(Employee employee) async {
-    final db = await database;
-    return await db.insert('employees', employee.toMap());
+    if (_employeeBox == null) await initDatabase();
+
+    // Generate a new ID if not provided
+    if (employee.id == null || employee.id == 0) {
+      int newId = (_employeeBox!.isEmpty) ? 1 : (_employeeBox!.values.map((e) => e.id ?? 0).reduce((a, b) => a > b ? a : b) + 1);
+      employee = employee.copyWith(id: newId);
+    }
+
+    await _employeeBox!.put(employee.id, employee);
+    return employee.id!;
   }
 
   Future<int> updateEmployee(Employee employee) async {
-    final db = await database;
-    return await db.update(
-      'employees',
-      employee.toMap(),
-      where: 'id = ?',
-      whereArgs: [employee.id],
-    );
+    if (_employeeBox == null) await initDatabase();
+    await _employeeBox!.put(employee.id, employee);
+    return employee.id!;
   }
 
   Future<int> deleteEmployee(int id) async {
-    final db = await database;
-    return await db.delete(
-      'employees',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    if (_employeeBox == null) await initDatabase();
+    await _employeeBox!.delete(id);
+    return id;
   }
 
   Future<List<Employee>> getEmployees() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('employees');
-    return List.generate(maps.length, (i) {
-      return Employee.fromMap(maps[i]);
-    });
+    if (_employeeBox == null) await initDatabase();
+    return _employeeBox!.values.toList();
   }
 
   Future<Employee?> getEmployee(int id) async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'employees',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-    if (maps.isNotEmpty) {
-      return Employee.fromMap(maps.first);
-    }
-    return null;
+    if (_employeeBox == null) await initDatabase();
+    return _employeeBox!.get(id);
   }
 }
