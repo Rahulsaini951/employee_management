@@ -53,12 +53,13 @@ lib/
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.3
-  equatable: ^2.0.5
-  sqflite: ^2.3.0
-  path: ^1.8.3
-  intl: ^0.18.1
-  flutter_slidable: ^3.0.0
+  flutter_bloc: ^9.1.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.1
+  intl: ^0.20.2
+  flutter_svg: ^2.0.17
+  equatable: ^2.0.7
 ```
 
 ## Screenshots
