@@ -28,6 +28,7 @@ class EmployeeManagementApp extends StatelessWidget {
         title: 'Employee Management',
         theme: AppTheme.lightTheme,
         home: const EmployeeListScreen(),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
