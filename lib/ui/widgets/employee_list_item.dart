@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
+import 'package:talent_track/data/models/employee.dart';
 import 'package:talent_track/ui/common/app_colors.dart';
-import '../../data/models/employee.dart';
+import 'package:talent_track/utils/date_util.dart';
 
 class EmployeeListItem extends StatelessWidget {
   final Employee employee;
@@ -21,14 +21,14 @@ class EmployeeListItem extends StatelessWidget {
     return Dismissible(
       key: Key(employee.id.toString()),
       background: Container(
-        color: Colors.red,
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        child: SvgPicture.asset(
-          'assets/images/delete_icon.svg',
-          width: 24,
-          height: 24,
-        )
+          color: Colors.red,
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: 20),
+          child: SvgPicture.asset(
+            'assets/images/delete_icon.svg',
+            width: 24,
+            height: 24,
+          )
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
@@ -65,7 +65,7 @@ class EmployeeListItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    _formatDateRange(),
+                    DateUtil.formatDateRange(employee.fromDate, employee.toDate),
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
@@ -78,17 +78,5 @@ class EmployeeListItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _formatDateRange() {
-    final DateFormat formatter = DateFormat('d MMM, yyyy');
-    final String fromDate = formatter.format(employee.fromDate);
-
-    if (employee.toDate == null) {
-      return 'From $fromDate';
-    } else {
-      final String toDate = formatter.format(employee.toDate!);
-      return '$fromDate - $toDate';
-    }
   }
 }

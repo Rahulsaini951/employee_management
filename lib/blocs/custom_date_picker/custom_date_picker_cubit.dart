@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:talent_track/utils/date_util.dart';
 part 'custom_date_picker_state.dart';
 
 class DatePickerCubit extends Cubit<DatePickerState> {
@@ -7,7 +8,7 @@ class DatePickerCubit extends Cubit<DatePickerState> {
 
   DatePickerCubit({
     DateTime? initialDate,
-    this.minDate, // Add minDate parameter
+    this.minDate,
   }) : super(DatePickerState(
     selectedDate: initialDate,
     displayedMonth: DateTime(
@@ -18,7 +19,7 @@ class DatePickerCubit extends Cubit<DatePickerState> {
 
   void selectDate(DateTime? date) {
     // Don't select dates before minDate
-    if (minDate != null && date != null && isDateBefore(date, minDate!)) {
+    if (minDate != null && date != null && DateUtil.isDateBefore(date, minDate!)) {
       return;
     }
     emit(state.copyWith(selectedDate: date));
@@ -29,8 +30,9 @@ class DatePickerCubit extends Cubit<DatePickerState> {
   }
 
   void selectToday() {
-    final today = DateTime.now();
-    if (minDate != null && isDateBefore(today, minDate!)) {
+    final today = DateUtil.today();
+    // Don't select today if it's before minDate
+    if (minDate != null && DateUtil.isDateBefore(today, minDate!)) {
       return;
     }
     emit(state.copyWith(
@@ -40,8 +42,9 @@ class DatePickerCubit extends Cubit<DatePickerState> {
   }
 
   void selectNextMonday() {
-    final nextMonday = _getNextWeekday(DateTime.monday);
-    if (minDate != null && isDateBefore(nextMonday, minDate!)) {
+    final nextMonday = DateUtil.getNextWeekday(DateTime.monday);
+    // Don't select if it's before minDate
+    if (minDate != null && DateUtil.isDateBefore(nextMonday, minDate!)) {
       return;
     }
     emit(state.copyWith(
@@ -51,8 +54,9 @@ class DatePickerCubit extends Cubit<DatePickerState> {
   }
 
   void selectNextTuesday() {
-    final nextTuesday = _getNextWeekday(DateTime.tuesday);
-    if (minDate != null && isDateBefore(nextTuesday, minDate!)) {
+    final nextTuesday = DateUtil.getNextWeekday(DateTime.tuesday);
+    // Don't select if it's before minDate
+    if (minDate != null && DateUtil.isDateBefore(nextTuesday, minDate!)) {
       return;
     }
     emit(state.copyWith(
@@ -62,9 +66,9 @@ class DatePickerCubit extends Cubit<DatePickerState> {
   }
 
   void selectNextWeek() {
-    final nextWeek = DateTime.now().add(const Duration(days: 7));
+    final nextWeek = DateUtil.nextWeek();
     // Don't select if it's before minDate
-    if (minDate != null && isDateBefore(nextWeek, minDate!)) {
+    if (minDate != null && DateUtil.isDateBefore(nextWeek, minDate!)) {
       return;
     }
     emit(state.copyWith(
@@ -89,38 +93,31 @@ class DatePickerCubit extends Cubit<DatePickerState> {
     emit(state.copyWith(displayedMonth: nextMonth));
   }
 
-  DateTime _getNextWeekday(int weekday) {
-    final now = DateTime.now();
-    final daysUntilWeekday = weekday - now.weekday;
-    return now.add(Duration(days: daysUntilWeekday > 0 ? daysUntilWeekday : daysUntilWeekday + 7));
-  }
-
   bool isDateEqual(DateTime a, DateTime b) {
-    return a.year == b.year && a.month == b.month && a.day == b.day;
+    return DateUtil.isDateEqual(a, b);
   }
 
   bool isDateBefore(DateTime a, DateTime b) {
-    return DateTime(a.year, a.month, a.day).isBefore(DateTime(b.year, b.month, b.day));
+    return DateUtil.isDateBefore(a, b);
   }
 
   bool isToday(DateTime date) {
-    final now = DateTime.now();
-    return isDateEqual(date, now);
+    return DateUtil.isDateEqual(date, DateTime.now());
   }
 
   bool isNextMonday(DateTime date) {
-    final nextMonday = _getNextWeekday(DateTime.monday);
-    return isDateEqual(date, nextMonday);
+    final nextMonday = DateUtil.getNextWeekday(DateTime.monday);
+    return DateUtil.isDateEqual(date, nextMonday);
   }
 
   bool isNextTuesday(DateTime date) {
-    final nextTuesday = _getNextWeekday(DateTime.tuesday);
-    return isDateEqual(date, nextTuesday);
+    final nextTuesday = DateUtil.getNextWeekday(DateTime.tuesday);
+    return DateUtil.isDateEqual(date, nextTuesday);
   }
 
   bool isNextWeek(DateTime date) {
-    final nextWeek = DateTime.now().add(const Duration(days: 7));
-    return isDateEqual(date, nextWeek);
+    final nextWeek = DateUtil.nextWeek();
+    return DateUtil.isDateEqual(date, nextWeek);
   }
 
   List<int> getDaysInMonthGrid() {

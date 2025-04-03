@@ -5,6 +5,7 @@ import 'package:talent_track/blocs/custom_date_picker/custom_date_picker_cubit.d
 import 'package:talent_track/ui/common/app_colors.dart';
 import 'package:talent_track/ui/common/app_theme.dart';
 import 'package:talent_track/ui/widgets/custom_app_button.dart';
+import 'package:talent_track/utils/string_util.dart';
 
 class CustomDatePicker extends StatelessWidget {
   final DateTime? initialDate;
@@ -24,7 +25,7 @@ class CustomDatePicker extends StatelessWidget {
     required BuildContext context,
     DateTime? initialDate,
     required bool isFromDate,
-    DateTime? minDate, // Add minDate parameter
+    DateTime? minDate,
   }) async {
     return await showDialog<DateTime?>(
       context: context,
@@ -34,12 +35,12 @@ class CustomDatePicker extends StatelessWidget {
           child: BlocProvider(
             create: (_) => DatePickerCubit(
               initialDate: initialDate,
-              minDate: minDate, // Pass minDate to cubit
+              minDate: minDate,
             ),
             child: CustomDatePicker(
               initialDate: initialDate,
               isFromDate: isFromDate,
-              minDate: minDate, // Pass minDate to widget
+              minDate: minDate,
               onDateSelected: (date) {
                 Navigator.of(context).pop(date);
               },
@@ -72,7 +73,7 @@ class CustomDatePicker extends StatelessWidget {
                         // Only show No Date option when isFromDate is false
                         Expanded(
                           child: CustomButton(
-                            text: 'No date',
+                            text: StringUtil.noDate,
                             onPressed: () => cubit.clearDate(),
                             isSelected: state.selectedDate == null,
                           ),
@@ -81,7 +82,7 @@ class CustomDatePicker extends StatelessWidget {
                       ],
                       Expanded(
                         child: CustomButton(
-                          text: 'Today',
+                          text: StringUtil.today,
                           onPressed: () => cubit.selectToday(),
                           isSelected: state.selectedDate != null &&
                               cubit.isToday(state.selectedDate!),
@@ -94,7 +95,7 @@ class CustomDatePicker extends StatelessWidget {
                         const SizedBox(width: 16),
                         Expanded(
                           child: CustomButton(
-                            text: 'Next Monday',
+                            text: StringUtil.nextMonday,
                             onPressed: () => cubit.selectNextMonday(),
                             isSelected: state.selectedDate != null &&
                                 cubit.isNextMonday(state.selectedDate!),
@@ -112,7 +113,7 @@ class CustomDatePicker extends StatelessWidget {
                       children: [
                         Expanded(
                           child: CustomButton(
-                            text: 'Next Tuesday',
+                            text: StringUtil.nextTuesday,
                             onPressed: () => cubit.selectNextTuesday(),
                             isSelected: state.selectedDate != null &&
                                 cubit.isNextTuesday(state.selectedDate!),
@@ -121,7 +122,7 @@ class CustomDatePicker extends StatelessWidget {
                         const SizedBox(width: 16),
                         Expanded(
                           child: CustomButton(
-                            text: 'After 1 week',
+                            text: StringUtil.afterOneWeek,
                             onPressed: () => cubit.selectNextWeek(),
                             isSelected: state.selectedDate != null &&
                                 cubit.isNextWeek(state.selectedDate!),
@@ -158,14 +159,14 @@ class CustomDatePicker extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                    children: StringUtil.weekdays
                         .map((day) => SizedBox(
                       width: 30,
                       child: Text(
                         day,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.cardSubtitle(context).copyWith(
-                          color: day == 'Sun' || day == 'Sat'
+                          color: day == StringUtil.sunday || day == StringUtil.saturday
                               ? AppColors.lightText
                               : AppColors.text,
                         ),
@@ -240,12 +241,12 @@ class CustomDatePicker extends StatelessWidget {
                         style: AppTextStyles.cardEmployeeName(context),
                       )
                           : Text(
-                        'No date',
+                        StringUtil.noDate,
                         style: AppTextStyles.cardEmployeeName(context),
                       ),
                       const Spacer(),
                       CustomButton(
-                        text: 'Cancel',
+                        text: StringUtil.cancel,
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -253,7 +254,7 @@ class CustomDatePicker extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       CustomButton(
-                        text: 'Save',
+                        text: StringUtil.save,
                         onPressed: () {
                           onDateSelected(state.selectedDate);
                         },
