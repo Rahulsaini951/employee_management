@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:talent_track/ui/common/app_colors.dart';
 import '../../data/models/employee.dart';
 
 class EmployeeListItem extends StatelessWidget {
@@ -33,6 +34,7 @@ class EmployeeListItem extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
+            color: AppColors.card,
             border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
           ),
           child: Row(

@@ -10,18 +10,21 @@ class CustomDatePicker extends StatelessWidget {
   final DateTime? initialDate;
   final Function(DateTime?) onDateSelected;
   final bool isFromDate;
+  final DateTime? minDate; // Minimum allowed date (for "To date" picker)
 
   const CustomDatePicker({
     super.key,
     this.initialDate,
     required this.onDateSelected,
     required this.isFromDate,
+    this.minDate,
   });
 
   static Future<DateTime?> show({
     required BuildContext context,
     DateTime? initialDate,
     required bool isFromDate,
+    DateTime? minDate, // Add minDate parameter
   }) async {
     return await showDialog<DateTime?>(
       context: context,
@@ -29,10 +32,14 @@ class CustomDatePicker extends StatelessWidget {
         return Dialog(
           insetPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
           child: BlocProvider(
-            create: (_) => DatePickerCubit(initialDate: initialDate),
+            create: (_) => DatePickerCubit(
+              initialDate: initialDate,
+              minDate: minDate, // Pass minDate to cubit
+            ),
             child: CustomDatePicker(
               initialDate: initialDate,
               isFromDate: isFromDate,
+              minDate: minDate, // Pass minDate to widget
               onDateSelected: (date) {
                 Navigator.of(context).pop(date);
               },
@@ -78,6 +85,9 @@ class CustomDatePicker extends StatelessWidget {
                           onPressed: () => cubit.selectToday(),
                           isSelected: state.selectedDate != null &&
                               cubit.isToday(state.selectedDate!),
+                          // Disable if today is before minDate
+                          isEnabled: minDate == null ||
+                              !cubit.isDateBefore(DateTime.now(), minDate!),
                         ),
                       ),
                       if (isFromDate) ...[
@@ -187,8 +197,10 @@ class CustomDatePicker extends StatelessWidget {
                       final isSelected = state.selectedDate != null &&
                           cubit.isDateEqual(date, state.selectedDate!);
 
+                      final isDisabled = minDate != null && cubit.isDateBefore(date, minDate!);
+
                       return GestureDetector(
-                        onTap: () => cubit.selectDate(date),
+                        onTap: isDisabled ? null : () => cubit.selectDate(date),
                         child: Container(
                           margin: const EdgeInsets.all(2),
                           decoration: BoxDecoration(
@@ -199,7 +211,9 @@ class CustomDatePicker extends StatelessWidget {
                             child: Text(
                               '$day',
                               style: AppTextStyles.cardSubtitle(context).copyWith(
-                                color: isSelected
+                                color: isDisabled
+                                    ? AppColors.lightText
+                                    : isSelected
                                     ? Colors.white
                                     : isToday
                                     ? AppColors.primary
@@ -214,7 +228,6 @@ class CustomDatePicker extends StatelessWidget {
                   ),
                 ),
 
-                // Date selection and buttons
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(

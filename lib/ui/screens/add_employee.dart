@@ -65,11 +65,36 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
     return GestureDetector(
       onTap: _dismissKeyboard,
       child: Scaffold(
+        backgroundColor: AppColors.secondaryBackground,
         appBar: AppBar(
           title: Text(
             widget.employee == null ? 'Add Employee Details' : 'Edit Employee Details',
             style: AppTextStyles.appBarTitle(context),
           ),
+          actions: [
+            if(widget.employee?.id != null)
+            IconButton(
+              onPressed: () {
+                context.read<EmployeeBloc>().add(DeleteEmployee(widget.employee!.id!));
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Employee data has been deleted',
+                      style: AppTextStyles.input(context).copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+              },
+              icon: SvgPicture.asset(
+                'assets/images/delete_icon.svg',
+                width: 24,
+                height: 24,
+              ),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -147,14 +172,13 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Date Range
                   Row(
                     children: [
                       Expanded(
                         child: InkWell(
                           onTap: () {
                             FocusScope.of(context).unfocus();
-                            _selectDate(true);
+                            _selectFromDate();
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -191,7 +215,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                         child: InkWell(
                           onTap: () {
                             FocusScope.of(context).unfocus();
-                            _selectDate(false);
+                            _selectToDate();
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -228,74 +252,46 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-            left: 16,
-            right: 16,
-            top: 8,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              CustomButton(text: 'Cancel',
-                  onPressed: (){
-                    FocusScope.of(context).unfocus();
-                    Navigator.pop(context);
-              },
-                  isSelected: false),
-              const SizedBox(width: 8),
-              ElevatedButton(
-                onPressed: () {
-                  // Dismiss keyboard before saving
-                  FocusScope.of(context).unfocus();
-                  _saveEmployee();
-                },
-                child: Text(
-                  'Save',
-                  style: AppTextStyles.positiveButtonText(context).copyWith(
-                    color: Colors.white,
-                  ),
-                ),
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Divider(height: 1, thickness: 1, color: AppColors.divider), // Divider added here
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                left: 16,
+                right: 16,
+                top: 8,
               ),
-            ],
-          ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CustomButton(
+                    text: 'Cancel',
+                    onPressed: () {
+                      _dismissKeyboard();
+                      Navigator.pop(context);
+                    },
+                    isSelected: false,
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      _dismissKeyboard();
+                      _saveEmployee();
+                    },
+                    child: Text(
+                      'Save',
+                      style: AppTextStyles.positiveButtonText(context).copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-
-
-        //   Padding(
-        //   padding: EdgeInsets.only(
-        //     bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-        //     left: 16,
-        //     right: 16,
-        //     top: 8,
-        //   ),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.end,
-        //     children: [
-        //       CustomButton(text: 'Cancel',
-        //           onPressed: (){
-        //             FocusScope.of(context).unfocus();
-        //             Navigator.pop(context);
-        //       },
-        //           isSelected: false),
-        //       const SizedBox(width: 8),
-        //       ElevatedButton(
-        //         onPressed: () {
-        //           // Dismiss keyboard before saving
-        //           FocusScope.of(context).unfocus();
-        //           _saveEmployee();
-        //         },
-        //         child: Text(
-        //           'Save',
-        //           style: AppTextStyles.positiveButtonText(context).copyWith(
-        //             color: Colors.white,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ),
     );
   }
@@ -334,32 +330,67 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
     );
   }
 
-  Future<void> _selectDate(bool isFromDate) async {
-    _dismissKeyboard();
+  // Future<void> _selectDate(bool isFromDate) async {
+  //   _dismissKeyboard();
+  //
+  //   final DateTime? pickedDate = await CustomDatePicker.show(
+  //     context: context,
+  //     initialDate: isFromDate ? _fromDate : _toDate,
+  //     isFromDate: isFromDate,
+  //   );
+  //
+  //   if (pickedDate != null) {
+  //     setState(() {
+  //       if (isFromDate) {
+  //         _fromDate = pickedDate;
+  //         if (_toDate != null && _toDate!.isBefore(_fromDate!)) {
+  //           _toDate = null;
+  //         }
+  //       } else {
+  //         _toDate = pickedDate;
+  //       }
+  //     });
+  //   } else if (!isFromDate) {
+  //     setState(() {
+  //       _toDate = null;
+  //     });
+  //   }
+  // }
 
-    final DateTime? pickedDate = await CustomDatePicker.show(
+  Future<void> _selectFromDate() async {
+    final selectedDate = await CustomDatePicker.show(
       context: context,
-      initialDate: isFromDate ? _fromDate : _toDate,
-      isFromDate: isFromDate,
+      initialDate: _fromDate,
+      isFromDate: true,
     );
 
-    if (pickedDate != null) {
+    if (selectedDate != null) {
       setState(() {
-        if (isFromDate) {
-          _fromDate = pickedDate;
-          if (_toDate != null && _toDate!.isBefore(_fromDate!)) {
-            _toDate = null;
-          }
-        } else {
-          _toDate = pickedDate;
+        _fromDate = selectedDate;
+        // If toDate is before fromDate, reset toDate
+        if (_toDate != null && _toDate!.isBefore(selectedDate)) {
+          _toDate = null;
         }
-      });
-    } else if (!isFromDate) {
-      setState(() {
-        _toDate = null;
       });
     }
   }
+
+  Future<void> _selectToDate() async {
+    final selectedDate = await CustomDatePicker.show(
+      context: context,
+      initialDate: _toDate,
+      isFromDate: false,
+      minDate: _fromDate, // Pass fromDate as minDate
+    );
+
+    if (selectedDate != null) {
+      setState(() {
+        _toDate = selectedDate;
+      });
+    }
+  }
+
+
 
   void _saveEmployee() {
     if (_formKey.currentState!.validate() && _selectedRole != null && _fromDate != null) {

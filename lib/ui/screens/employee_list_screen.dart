@@ -94,25 +94,26 @@ class EmployeeListScreen extends StatelessWidget {
   Widget _buildEmployeeList(
       BuildContext context,
       List<Employee> currentEmployees,
-      List<Employee> previousEmployees
-      ) {
-    return ListView(
+      List<Employee> previousEmployees) {
+    return Stack(
       children: [
-        if (currentEmployees.isNotEmpty) ...[
-          Container(
-            color: AppColors.divider,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Current employees',
-                style: AppTextStyles.dividerTitle(context).copyWith(
-                  color: AppColors.primary,
+        ListView(
+          padding: const EdgeInsets.only(bottom: 50), // Avoid overlapping with the text
+          children: [
+            if (currentEmployees.isNotEmpty) ...[
+              Container(
+                color: AppColors.divider,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Current employees',
+                    style: AppTextStyles.dividerTitle(context).copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          ...currentEmployees.map((employee) =>
-              EmployeeListItem(
+              ...currentEmployees.map((employee) => EmployeeListItem(
                 employee: employee,
                 onDelete: (id) {
                   context.read<EmployeeBloc>().add(DeleteEmployee(id!));
@@ -135,25 +136,22 @@ class EmployeeListScreen extends StatelessWidget {
                     ),
                   );
                 },
-              )
-          ),
-        ],
-
-        if (previousEmployees.isNotEmpty) ...[
-          Container(
-            color: AppColors.divider,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Previous employees',
-                style: AppTextStyles.dividerTitle(context).copyWith(
-                  color: AppColors.primary,
+              )),
+            ],
+            if (previousEmployees.isNotEmpty) ...[
+              Container(
+                color: AppColors.divider,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Previous employees',
+                    style: AppTextStyles.dividerTitle(context).copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          ...previousEmployees.map((employee) =>
-              EmployeeListItem(
+              ...previousEmployees.map((employee) => EmployeeListItem(
                 employee: employee,
                 onDelete: (id) {
                   context.read<EmployeeBloc>().add(DeleteEmployee(id!));
@@ -176,10 +174,113 @@ class EmployeeListScreen extends StatelessWidget {
                     ),
                   );
                 },
-              )
+              )),
+            ],
+          ],
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            color: AppColors.divider,
+            padding: const EdgeInsets.all(16),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Swipe left to delete',
+              style: AppTextStyles.input(context).copyWith(
+                color: Colors.black54,
+              ),
+            ),
           ),
-        ],
+        ),
       ],
     );
   }
+
+  // Widget _buildEmployeeList(
+  //     BuildContext context,
+  //     List<Employee> currentEmployees,
+  //     List<Employee> previousEmployees
+  //     ) {
+  //   return ListView(
+  //     children: [
+  //       if (currentEmployees.isNotEmpty) ...[
+  //         Padding(
+  //           padding: const EdgeInsets.all(16.0),
+  //           child: Text(
+  //             'Current employees',
+  //             style: AppTextStyles.dividerTitle(context).copyWith(
+  //               color: AppColors.primary,
+  //             ),
+  //           ),
+  //         ),
+  //         ...currentEmployees.map((employee) =>
+  //             EmployeeListItem(
+  //               employee: employee,
+  //               onDelete: (id) {
+  //                 context.read<EmployeeBloc>().add(DeleteEmployee(id!));
+  //                 ScaffoldMessenger.of(context).showSnackBar(
+  //                   SnackBar(
+  //                     content: Text(
+  //                       'Employee data has been deleted',
+  //                       style: AppTextStyles.input(context).copyWith(
+  //                         color: Colors.white,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 );
+  //               },
+  //               onEdit: (employee) {
+  //                 Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                     builder: (context) => AddEmployeeScreen(employee: employee),
+  //                   ),
+  //                 );
+  //               },
+  //             )
+  //         ),
+  //       ],
+  //
+  //       if (previousEmployees.isNotEmpty) ...[
+  //         Padding(
+  //           padding: const EdgeInsets.all(16.0),
+  //           child: Text(
+  //             'Previous employees',
+  //             style: AppTextStyles.dividerTitle(context).copyWith(
+  //               color: AppColors.primary,
+  //             ),
+  //           ),
+  //         ),
+  //         ...previousEmployees.map((employee) =>
+  //             EmployeeListItem(
+  //               employee: employee,
+  //               onDelete: (id) {
+  //                 context.read<EmployeeBloc>().add(DeleteEmployee(id!));
+  //                 ScaffoldMessenger.of(context).showSnackBar(
+  //                   SnackBar(
+  //                     content: Text(
+  //                       'Employee data has been deleted',
+  //                       style: AppTextStyles.input(context).copyWith(
+  //                         color: Colors.white,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 );
+  //               },
+  //               onEdit: (employee) {
+  //                 Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                     builder: (context) => AddEmployeeScreen(employee: employee),
+  //                   ),
+  //                 );
+  //               },
+  //             )
+  //         ),
+  //       ],
+  //     ],
+  //   );
+  // }
 }

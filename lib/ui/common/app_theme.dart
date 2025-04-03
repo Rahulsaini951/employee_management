@@ -218,7 +218,7 @@ class AppTheme {
 
 
       inputDecorationTheme: InputDecorationTheme(
-        fillColor: AppColors.background,
+        fillColor: AppColors.secondaryBackground,
         filled: true,
         hintStyle: baseTextTheme.bodyLarge?.copyWith(
           color: AppColors.lightText,
