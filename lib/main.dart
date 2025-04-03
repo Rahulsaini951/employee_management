@@ -10,11 +10,7 @@ import 'ui/screens/employee_list_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize Hive
   await Hive.initFlutter();
-
-  // Initialize database
   final databaseHelper = DatabaseHelper();
   await databaseHelper.initDatabase();
 
