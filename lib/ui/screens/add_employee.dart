@@ -261,6 +261,41 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
             ],
           ),
         ),
+
+
+        //   Padding(
+        //   padding: EdgeInsets.only(
+        //     bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+        //     left: 16,
+        //     right: 16,
+        //     top: 8,
+        //   ),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.end,
+        //     children: [
+        //       CustomButton(text: 'Cancel',
+        //           onPressed: (){
+        //             FocusScope.of(context).unfocus();
+        //             Navigator.pop(context);
+        //       },
+        //           isSelected: false),
+        //       const SizedBox(width: 8),
+        //       ElevatedButton(
+        //         onPressed: () {
+        //           // Dismiss keyboard before saving
+        //           FocusScope.of(context).unfocus();
+        //           _saveEmployee();
+        //         },
+        //         child: Text(
+        //           'Save',
+        //           style: AppTextStyles.positiveButtonText(context).copyWith(
+        //             color: Colors.white,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }
