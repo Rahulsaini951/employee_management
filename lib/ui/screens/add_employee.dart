@@ -330,33 +330,6 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
     );
   }
 
-  // Future<void> _selectDate(bool isFromDate) async {
-  //   _dismissKeyboard();
-  //
-  //   final DateTime? pickedDate = await CustomDatePicker.show(
-  //     context: context,
-  //     initialDate: isFromDate ? _fromDate : _toDate,
-  //     isFromDate: isFromDate,
-  //   );
-  //
-  //   if (pickedDate != null) {
-  //     setState(() {
-  //       if (isFromDate) {
-  //         _fromDate = pickedDate;
-  //         if (_toDate != null && _toDate!.isBefore(_fromDate!)) {
-  //           _toDate = null;
-  //         }
-  //       } else {
-  //         _toDate = pickedDate;
-  //       }
-  //     });
-  //   } else if (!isFromDate) {
-  //     setState(() {
-  //       _toDate = null;
-  //     });
-  //   }
-  // }
-
   Future<void> _selectFromDate() async {
     final selectedDate = await CustomDatePicker.show(
       context: context,
@@ -389,8 +362,6 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
       });
     }
   }
-
-
 
   void _saveEmployee() {
     if (_formKey.currentState!.validate() && _selectedRole != null && _fromDate != null) {

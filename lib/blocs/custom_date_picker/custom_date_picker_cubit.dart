@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'custom_date_picker_state.dart';
 
 class DatePickerCubit extends Cubit<DatePickerState> {
-  final DateTime? minDate; // Add minDate field
+  final DateTime? minDate;
 
   DatePickerCubit({
     DateTime? initialDate,
@@ -30,7 +30,6 @@ class DatePickerCubit extends Cubit<DatePickerState> {
 
   void selectToday() {
     final today = DateTime.now();
-    // Don't select today if it's before minDate
     if (minDate != null && isDateBefore(today, minDate!)) {
       return;
     }
@@ -42,7 +41,6 @@ class DatePickerCubit extends Cubit<DatePickerState> {
 
   void selectNextMonday() {
     final nextMonday = _getNextWeekday(DateTime.monday);
-    // Don't select if it's before minDate
     if (minDate != null && isDateBefore(nextMonday, minDate!)) {
       return;
     }
@@ -54,7 +52,6 @@ class DatePickerCubit extends Cubit<DatePickerState> {
 
   void selectNextTuesday() {
     final nextTuesday = _getNextWeekday(DateTime.tuesday);
-    // Don't select if it's before minDate
     if (minDate != null && isDateBefore(nextTuesday, minDate!)) {
       return;
     }
@@ -102,7 +99,6 @@ class DatePickerCubit extends Cubit<DatePickerState> {
     return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
-  // Add method to check if a date is before another date
   bool isDateBefore(DateTime a, DateTime b) {
     return DateTime(a.year, a.month, a.day).isBefore(DateTime(b.year, b.month, b.day));
   }

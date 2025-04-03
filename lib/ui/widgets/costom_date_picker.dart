@@ -10,7 +10,7 @@ class CustomDatePicker extends StatelessWidget {
   final DateTime? initialDate;
   final Function(DateTime?) onDateSelected;
   final bool isFromDate;
-  final DateTime? minDate; // Minimum allowed date (for "To date" picker)
+  final DateTime? minDate;
 
   const CustomDatePicker({
     super.key,

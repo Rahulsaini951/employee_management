@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:talent_track/ui/common/app_colors.dart';
 import '../../data/models/employee.dart';
@@ -23,7 +24,11 @@ class EmployeeListItem extends StatelessWidget {
         color: Colors.red,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
-        child: const Icon(Icons.delete, color: Colors.white),
+        child: SvgPicture.asset(
+          'assets/images/delete_icon.svg',
+          width: 24,
+          height: 24,
+        )
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {

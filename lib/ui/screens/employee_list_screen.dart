@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:talent_track/blocs/employee/employee_bloc.dart';
+import 'package:talent_track/blocs/employee/employee_event.dart';
+import 'package:talent_track/blocs/employee/employee_state.dart';
+import 'package:talent_track/data/models/employee.dart';
+import 'package:talent_track/ui/common/app_colors.dart';
+import 'package:talent_track/ui/common/app_theme.dart';
 import 'package:talent_track/ui/screens/add_employee.dart';
-import '../../blocs/employee/employee_bloc.dart';
-import '../../blocs/employee/employee_event.dart';
-import '../../blocs/employee/employee_state.dart';
-import '../../data/models/employee.dart';
-import '../common/app_theme.dart';
-import '../widgets/employee_list_item.dart';
-import '../common/app_colors.dart';
+import 'package:talent_track/ui/widgets/employee_list_item.dart';
+
 
 class EmployeeListScreen extends StatelessWidget {
   const EmployeeListScreen({super.key});
@@ -197,90 +198,4 @@ class EmployeeListScreen extends StatelessWidget {
       ],
     );
   }
-
-  // Widget _buildEmployeeList(
-  //     BuildContext context,
-  //     List<Employee> currentEmployees,
-  //     List<Employee> previousEmployees
-  //     ) {
-  //   return ListView(
-  //     children: [
-  //       if (currentEmployees.isNotEmpty) ...[
-  //         Padding(
-  //           padding: const EdgeInsets.all(16.0),
-  //           child: Text(
-  //             'Current employees',
-  //             style: AppTextStyles.dividerTitle(context).copyWith(
-  //               color: AppColors.primary,
-  //             ),
-  //           ),
-  //         ),
-  //         ...currentEmployees.map((employee) =>
-  //             EmployeeListItem(
-  //               employee: employee,
-  //               onDelete: (id) {
-  //                 context.read<EmployeeBloc>().add(DeleteEmployee(id!));
-  //                 ScaffoldMessenger.of(context).showSnackBar(
-  //                   SnackBar(
-  //                     content: Text(
-  //                       'Employee data has been deleted',
-  //                       style: AppTextStyles.input(context).copyWith(
-  //                         color: Colors.white,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 );
-  //               },
-  //               onEdit: (employee) {
-  //                 Navigator.push(
-  //                   context,
-  //                   MaterialPageRoute(
-  //                     builder: (context) => AddEmployeeScreen(employee: employee),
-  //                   ),
-  //                 );
-  //               },
-  //             )
-  //         ),
-  //       ],
-  //
-  //       if (previousEmployees.isNotEmpty) ...[
-  //         Padding(
-  //           padding: const EdgeInsets.all(16.0),
-  //           child: Text(
-  //             'Previous employees',
-  //             style: AppTextStyles.dividerTitle(context).copyWith(
-  //               color: AppColors.primary,
-  //             ),
-  //           ),
-  //         ),
-  //         ...previousEmployees.map((employee) =>
-  //             EmployeeListItem(
-  //               employee: employee,
-  //               onDelete: (id) {
-  //                 context.read<EmployeeBloc>().add(DeleteEmployee(id!));
-  //                 ScaffoldMessenger.of(context).showSnackBar(
-  //                   SnackBar(
-  //                     content: Text(
-  //                       'Employee data has been deleted',
-  //                       style: AppTextStyles.input(context).copyWith(
-  //                         color: Colors.white,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 );
-  //               },
-  //               onEdit: (employee) {
-  //                 Navigator.push(
-  //                   context,
-  //                   MaterialPageRoute(
-  //                     builder: (context) => AddEmployeeScreen(employee: employee),
-  //                   ),
-  //                 );
-  //               },
-  //             )
-  //         ),
-  //       ],
-  //     ],
-  //   );
-  // }
 }
