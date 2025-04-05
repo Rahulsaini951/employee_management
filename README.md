@@ -24,8 +24,8 @@ A Flutter application for managing employee records with local database persiste
 ```
 lib/
 ├── blocs/              # BLoC/Cubit state management
-│   ├── employee_bloc/  # Employee management logic
-│   └── theme_bloc/     # App theme management
+│   ├── employee/  # Employee management logic
+│   └── custom_date_picker/     # Date picker logic
 ├── data/
 │   ├── models/         # Data models
 │   ├── repositories/   # Repositories for data handling
